@@ -59,8 +59,9 @@ export class Contract {
     if(context.sender == "Owner.testnet")
     {
       this.getProfile(NEARaccountID).AddVerification(VerificationMethod)
+      return "Account Verified Successfully"
     }
-    return context.sender
+    return context.sender + " Doesn't have permission to verify an account"
   }
 
 }
