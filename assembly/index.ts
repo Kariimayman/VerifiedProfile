@@ -14,7 +14,7 @@ import { usersProfiles, Profile } from "./Profile";
         let profile = usersProfiles[i];
         if (profile.NEARaccountID == NEARaccountID) {
             usersProfiles.push(Profile);
-            return "Profile of " + Name + " has been created successfully by ";
+            return "Profile of " + Name + " has been created successfully !!";
         }
       }
   }
