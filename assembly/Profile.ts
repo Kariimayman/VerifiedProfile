@@ -57,3 +57,4 @@ export class Profile {
         }
     }
 }
+export const  usersProfiles = new PersistentVector<Profile>("V");
