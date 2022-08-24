@@ -20,10 +20,11 @@ export class Profile {
       this.DateofBirth = DateofBirth;
       this.NEARaccountID = context.sender;
     }
-    // @mutateState()
-    // AddVerification(VerificationMethod : string){
-    //     this.Verifications.push(VerificationMethod);
-    // }
+    @mutateState()
+    AddVerification(VerificationMethod : string): string{
+        this.Verifications.push(VerificationMethod);
+        return VerificationMethod;
+    }
     isAccountVerified(): Boolean{
         if(this.Verifications.length == 0)
         {
