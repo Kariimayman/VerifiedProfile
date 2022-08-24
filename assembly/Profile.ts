@@ -25,9 +25,9 @@ export class Profile {
 
 // This function will be called by the front end to add a verfication method to the profile 
     @mutateState()
-    AddVerification(VerificationMethod : string): string{
+    AddVerification(VerificationMethod : string): PersistentVector<string>{
         this.Verifications.push(VerificationMethod);
-        return VerificationMethod;
+        return this.Verifications;
     }
 
 // This function acts as API to know if the account is Verified or not  
