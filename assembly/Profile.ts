@@ -19,7 +19,7 @@ export class Profile {
       this.Bio = Bio;
       this.Email = Email;
       this.Website = Website;
-      this.ImageURL = ImageURL;
+      this.ImageURL = ImageURL; 
       this.DateofBirth = DateofBirth;
       this.NEARaccountID = context.sender;
     }
