@@ -9,6 +9,7 @@ export class Profile {
     ImageURL : string;
     DateofBirth : string;
     NEARaccountID : string;
+// A List that contains all the verification methods this profile acquired
     Verifications : PersistentVector<string> = new PersistentVector<string>("V")
 
 // A constructor to intialize all the variables and set none added variables to "not found" (for the sake of testing only)
@@ -23,7 +24,7 @@ export class Profile {
       this.NEARaccountID = context.sender;
     }
 
-// This function will be called by the front end to add a verfication method to the profile 
+// This function will be called withen the contract to add a verfication method to the profile 
     @mutateState()
     AddVerification(VerificationMethod : string): PersistentVector<string>{
         this.Verifications.push(VerificationMethod);
@@ -39,7 +40,7 @@ export class Profile {
         return true
     }
 
-// This function return all the verification methods that this profile accrued
+// This function return all the verification methods that this profile acquired
     GetVerifications(): Array<string>{
         if(this.Verifications.length == 0)
         {
@@ -57,4 +58,3 @@ export class Profile {
         }
     }
 }
-export const  usersProfiles = new PersistentVector<Profile>("V");
