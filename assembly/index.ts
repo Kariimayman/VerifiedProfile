@@ -19,11 +19,11 @@ export class Contract {
     NEARaccountID = context.sender
     if(this.ProfileExist(NEARaccountID) == true)
     {
-      return "This NEAR account is already linked to another account"
+      return "This NEAR ID is already linked to another account"
     }
     let profile = new Profile(Name, Bio, Email, Website, ImageURL, DateofBirth);
     this.ProfilesList.push(profile)
-    return "account Created successfully"
+    return "Account Created Successfully"
   }
 
 // This function checks if there is a profile linked to a given NEAR ID or not and returns a boolean true or false
