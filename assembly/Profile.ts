@@ -1,0 +1,4 @@
+@nearBindgen
+export class Profile {
+
+}
