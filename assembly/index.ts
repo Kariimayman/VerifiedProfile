@@ -1,68 +1,89 @@
 import { Profile } from "./Profile";
 import { context, PersistentVector } from "near-sdk-as";
 
+@nearBindgen
 export class Contract {
   // A List that contains all the registered profiles
-  ProfilesList : PersistentVector<Profile> = new PersistentVector<Profile>("P");
+  profilesList : PersistentVector<Profile> = new PersistentVector<Profile>("P");
 
   // This functions checks if the profile is already linked to this near account or not, if it isn't then it creates as new profile
   @mutateState()
   createProfile(
-    Name: string,
-    Bio: string,
-    Email : string,
-    Website : string,
-    ImageURL : string,
-    DateofBirth : string,
-    NEARaccountID : string
+    name: string,
+    bio: string,
+    email : string,
+    website : string,
+    imageURL : string,
+    dateofBirth : string,
   ): string {
-    NEARaccountID = context.sender
-    if(this.ProfileExist(NEARaccountID) == true)
+    let accountID = context.predecessor
+    let profile = this.getProfile(accountID)
+    if(profile != null)
     {
       return "This NEAR ID is already linked to another account"
     }
-    let profile = new Profile(Name, Bio, Email, Website, ImageURL, DateofBirth);
-    this.ProfilesList.push(profile)
+    profile = new Profile(name, bio, email, website, imageURL, dateofBirth, accountID);
+    this.profilesList.push(profile)
     return "Account Created Successfully"
   }
 
-// This function checks if there is a profile linked to a given NEAR ID or not and returns a boolean true or false
-  @mutateState()
-  ProfileExist(NEARaccountID: string) : boolean{
-    for (let i = 0; i < this.ProfilesList.length; i++) {
-      let profile = this.ProfilesList[i];
-      if (profile.NEARaccountID == NEARaccountID) {
-        return true;
-      }
-    }
-    return false
-  }
-
 // This function returns the account that is linked to a given NEAR ID
-/* WARNING : ALWAY USE ProfileExist() FUNCTION BEFORE USING THIS FUNCTION TO CHECK IF THERE IS ANY ACCOUNT TO RETURN*/ 
   @mutateState()
-  getProfile(NEARaccountID: string): Profile {
-    let profile = new Profile()
-    for (let i = 0; i < this.ProfilesList.length; i++) {
-      profile = this.ProfilesList[i];
-      if (profile.NEARaccountID == NEARaccountID) {
+  getProfile(accountID: string): Profile | null {
+    for (let i = 0; i < this.profilesList.length; i++) {
+      let profile = this.profilesList[i];
+      if (profile.accountID == accountID) {
         return profile;
       }
     }
-    return profile;
+    return null;
   }
   
   // This function will be called by the front-end to add a verification method and only the "owner/admin" can access it
   // assuming that the admin id is Owner.testnet
   @mutateState()
-  Verifyaccount(NEARaccountID : string , VerificationMethod : string) : string{
-    if(context.sender == "Owner.testnet")
+  verifyaccount(accountID : string , VerificationMethod : string) : string{
+    let profile = this.getProfile(accountID)
+    if(context.predecessor == "Owner.testnet" && profile != null)
     {
-      this.getProfile(NEARaccountID).AddVerification(VerificationMethod)
+      profile.verifications.push(VerificationMethod)
       return "Account Verified Successfully"
     }
-    return context.sender + " Doesn't have permission to verify an account"
+    return "An Error has occurred"
   }
 
+  // This function acts as API to know if the account is Verified or not  
+//   isAccountVerified(accountID : string): Boolean{
+//     let profile = this.getProfile(accountID)
+//     if(profile != null)
+//     {
+//       if(profile.verifications.length == 0)
+//       {
+//         return false;
+//       }
+//     }
+//     return true
+// }
+
+// This function return all the verification methods that this profile acquired
+  getVerifications(accountID : string): Array<string> | null{
+    let profile = this.getProfile(accountID)
+    if(profile != null)
+    {
+      if(profile.verifications.length == 0)
+      {
+        return null
+      }
+      else
+      {
+        let Verifications = new Array<string>(profile.verifications.length);
+        for (let i = 0; i < profile.verifications.length; i++) {
+          Verifications[i] = profile.verifications[i];
+        }
+        return Verifications;
+      }
+    } 
+    return null
+  }
 }
  

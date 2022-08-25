@@ -1,60 +1,24 @@
-import { context, PersistentVector } from "near-sdk-as";
-
 @nearBindgen
 export class Profile {
-    Name: string;
-    Bio: string;
-    Email : string;
-    Website : string;
-    ImageURL : string;
-    DateofBirth : string;
-    NEARaccountID : string;
+    name: string;
+    bio: string;
+    email : string;
+    website : string;
+    imageURL : string;
+    dateofBirth : string;
+    accountID : string;
 // A List that contains all the verification methods this profile acquired
-    Verifications : PersistentVector<string> = new PersistentVector<string>("V")
+    verifications : Array<string> = new Array<string>(0)
 
 // A constructor to intialize all the variables and set none added variables to "not found" (for the sake of testing only)
-    constructor(Name: string = "NotFound", Bio: string= "NotFound", Email: string= "NotFound", Website: string= "NotFound", 
-                ImageURL: string= "NotFound", DateofBirth: string= "NotFound") {
-      this.Name = Name;
-      this.Bio = Bio;
-      this.Email = Email;
-      this.Website = Website;
-      this.ImageURL = ImageURL; 
-      this.DateofBirth = DateofBirth;
-      this.NEARaccountID = context.sender;
-    }
-
-// This function will be called withen the contract to add a verfication method to the profile 
-    @mutateState()
-    AddVerification(VerificationMethod : string): PersistentVector<string>{
-        this.Verifications.push(VerificationMethod);
-        return this.Verifications;
-    }
-
-// This function acts as API to know if the account is Verified or not  
-    isAccountVerified(): Boolean{
-        if(this.Verifications.length == 0)
-        {
-            return false;
-        }
-        return true
-    }
-
-// This function return all the verification methods that this profile acquired
-    GetVerifications(): Array<string>{
-        if(this.Verifications.length == 0)
-        {
-            let Verifications = new Array<string>(1);
-            Verifications.push("Account Not Verified")
-            return Verifications;
-        }
-        else
-        {
-            let Verifications = new Array<string>(this.Verifications.length);
-            for (let i = 0; i < this.Verifications.length; i++) {
-                Verifications[i] = this.Verifications[i];
-            }
-            return Verifications;
-        }
+    constructor(name: string = "NotFound", bio: string= "NotFound", email: string= "NotFound", website: string= "NotFound", 
+                imageURL: string= "NotFound", dateofBirth: string= "NotFound",accountID : string = "NotFound") {
+      this.name = name;
+      this.bio = bio;
+      this.email = email;
+      this.website = website;
+      this.imageURL = imageURL; 
+      this.dateofBirth = dateofBirth;
+      this.accountID = accountID;
     }
 }
