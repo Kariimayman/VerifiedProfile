@@ -28,4 +28,10 @@ export class Profile {
 export class verification{
     provider : string;
     level : i32;
+    
+    constructor(provider : string = "Notfound", level : i32 = 0)
+    {
+        this.level = level
+        this.provider = provider
+    }
 }
