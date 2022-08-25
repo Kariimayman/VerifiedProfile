@@ -23,6 +23,8 @@ export class Profile {
       this.accountID = accountID;
     }
 }
+
+@nearBindgen
 export class verification{
     provider : string;
     level : i32;
