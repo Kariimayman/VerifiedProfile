@@ -7,8 +7,9 @@ export class Profile {
     imageURL : string;
     dateofBirth : string;
     accountID : string;
+    verificationlevel : i32 = 0;
 // A List that contains all the verification methods this profile acquired
-    verifications : Array<string> = new Array<string>(0)
+    verificationList: Array<verification> = new Array<verification>(0)
 
 // A constructor to intialize all the variables and set none added variables to "not found" (for the sake of testing only)
     constructor(name: string = "NotFound", bio: string= "NotFound", email: string= "NotFound", website: string= "NotFound", 
@@ -21,4 +22,8 @@ export class Profile {
       this.dateofBirth = dateofBirth;
       this.accountID = accountID;
     }
+}
+export class verification{
+    provider : string;
+    level : i32;
 }

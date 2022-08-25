@@ -1,4 +1,4 @@
-import { Profile } from "./Profile";
+import { Profile, verification } from "./models";
 import { context, PersistentVector } from "near-sdk-as";
 
 @nearBindgen
@@ -42,45 +42,49 @@ export class Contract {
   // This function will be called by the front-end to add a verification method and only the "owner/admin" can access it
   // assuming that the admin id is Owner.testnet
   @mutateState()
-  verifyaccount(accountID : string , VerificationMethod : string) : string{
+  verifyaccount(accountID : string , VerificationMethod : verification) : string{
     let profile = this.getProfile(accountID)
     if(context.predecessor == "Owner.testnet" && profile != null)
     {
-      profile.verifications.push(VerificationMethod)
+      profile.verificationList.push(VerificationMethod)
+      if(VerificationMethod.level > profile.verificationlevel)
+      {
+        profile.verificationlevel = VerificationMethod.level
+      }
       return "Account Verified Successfully"
     }
     return "An Error has occurred"
   }
 
   // This function acts as API to know if the account is Verified or not  
-//   isAccountVerified(accountID : string): Boolean{
-//     let profile = this.getProfile(accountID)
-//     if(profile != null)
-//     {
-//       if(profile.verifications.length == 0)
-//       {
-//         return false;
-//       }
-//     }
-//     return true
-// }
-
-// This function return all the verification methods that this profile acquired
-  getVerifications(accountID : string): Array<string> | null{
+  isAccountVerified(accountID : string): bool{
     let profile = this.getProfile(accountID)
     if(profile != null)
     {
-      if(profile.verifications.length == 0)
+      if(profile.verificationList.length == 0)
+      {
+        return false;
+      }
+    }
+    return true
+  }
+
+// This function return all the verification methods that this profile acquired
+  getVerifications(accountID : string): Array<verification> | null{
+    let profile = this.getProfile(accountID)
+    if(profile != null)
+    {
+      if(profile.verificationList.length == 0)
       {
         return null
       }
       else
       {
-        let Verifications = new Array<string>(profile.verifications.length);
-        for (let i = 0; i < profile.verifications.length; i++) {
-          Verifications[i] = profile.verifications[i];
+        let verificationList = new Array<verification>(profile.verificationList.length);
+        for (let i = 0; i < profile.verificationList.length; i++) {
+          verificationList[i] = profile.verificationList[i];
         }
-        return Verifications;
+        return verificationList;
       }
     } 
     return null
