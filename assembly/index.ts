@@ -90,4 +90,3 @@ export class Contract {
     return null
   }
 }
- 
