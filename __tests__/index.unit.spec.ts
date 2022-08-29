@@ -1,19 +1,37 @@
-import { context, PersistentVector } from "near-sdk-as";
-import { Contract } from "../assembly/index";
-import { Profile, verification } from "../assembly/models";
+import { Contract } from "../assembly";
+import { VMContext } from "near-mock-vm";
+import { Profile } from "../assembly/models";
+
+let profilee: Profile;
+let contractt: Contract;
+const CREATOR_ACCOUNT_ID = "ali";
 
 
 beforeAll(() => {
-    contract = new Contract();
+    contractt = new Contract();
+    VMContext.setSigner_account_id(CREATOR_ACCOUNT_ID);
 });
 
-describe("create a profile", () => {
-    it("should orint the statement 'This NEAR ID is already linked to another account' OR The statement 'Account Created Successfully'", () => {
+describe("Creating a profile", () => {
+    test("should print the statement 'Account Created Successfully'", () => {
 
-        expect(Contract.createProfile()).toStrictEqual("This NEAR ID is already linked to another account" || "The statement 'Account Created Successfully")
+        expect(contractt.createProfile(profilee)).toBe("Account Created Successfully")
         
     });
 });
+
+describe("Getting a profile", () => {
+    test("returns the account that is linked to a given NEAR ID", () => {
+
+        expect(contractt.getProfile(CREATOR_ACCOUNT_ID)).toBe(contractt.profilesList.get(CREATOR_ACCOUNT_ID))
+        
+    });
+});
+
+
+
+
+
 
 
 
