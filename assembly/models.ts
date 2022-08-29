@@ -7,7 +7,6 @@ export class Profile {
     imageURL : string;
     dateOfBirth : u64;
     accountID : string;
-    verificationLevel : u8 = 0;
 // A List that contains all the verification methods this profile acquired
     verificationList: Array<Verification> = new Array<Verification>(0)
 
@@ -22,6 +21,19 @@ export class Profile {
       this.dateOfBirth = dateOfBirth;
       this.accountID = accountID;
     }
+
+    getVerificationLevel() : u8
+    {
+        let max : u8 = 0
+        for (let i = 0; i < this.verificationList.length; ++i)
+        {
+            if(max > this.verificationList[i].level)
+            {
+                max = this.verificationList[i].level
+            }
+        }
+        return max
+    }
 }
 
 @nearBindgen
@@ -30,7 +42,7 @@ export class Verification{
     level : u8;
     description : string
     
-    constructor(provider : string = "Notfound", level : u8 = 0, description : string )
+    constructor(provider : string = "Notfound", level : u8 = 0, description : string  ="not found")
     {
         this.level = level
         this.provider = provider

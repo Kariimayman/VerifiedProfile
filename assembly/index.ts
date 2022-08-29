@@ -1,5 +1,5 @@
 import { Profile, Verification } from "./models";
-import { context, PersistentMap} from "near-sdk-as";
+import { context, PersistentMap, u128} from "near-sdk-as";
 
 @nearBindgen
 export class Contract {
@@ -10,19 +10,15 @@ export class Contract {
   @mutateState()
   createProfile(profile : Profile): string {
     let accountID = context.sender
-    if(this.profilesList.get(accountID) != null)
-    {
-      return "This NEAR ID is already linked to another account"
-    }
+    assert(!this.profilesList.contains(accountID), "This NEAR ID is already linked to another account")
     this.profilesList.set(accountID,  profile)
     return "Account Created Successfully"
   }
 
 // This function returns the account that is linked to a given NEAR ID
-  // @mutateState()
-  // getProfile(accountID: string): Profile | null {
-  //   return this.profilesList.get(accountID)
-  // }
+  getProfile(accountID: string): Profile | null {
+    return this.profilesList.get(accountID)
+  }
   
   // This function will be called by the front-end to add a verification method and only the "owner/admin" can access it
   // assuming that the admin id is Owner.testnet
@@ -30,19 +26,17 @@ export class Contract {
   verifyAccount(accountID : string , VerificationMethod : Verification) : string{
     let profile = this.profilesList.get(accountID)
     let adminProfile = "Owner.testnet"
-    if(context.predecessor == adminProfile && profile != null)
+    assert(context.predecessor == adminProfile, "Access Denied")
+    assert(context.attachedDeposit >= u128.from(1), "1 NEAR is required")
+    if(profile != null)
     {
       profile.verificationList.push(VerificationMethod)
-      if(VerificationMethod.level > profile.verificationLevel)
-      {
-        profile.verificationLevel = VerificationMethod.level
-      }
       return "Account Verified Successfully"
     }
-    return "An Error has occurred"
+    return "Account is missing"
   }
 
-  // This function acts as API to know if the account is Verified or not  
+  // This function acts as API to know if the account is Verified or not
   isAccountVerified(accountID : string): bool{
     let profile = this.profilesList.get(accountID)
     if(profile != null)
@@ -57,6 +51,7 @@ export class Contract {
 
 // This function return all the verification methods that this profile acquired
   getVerifications(accountID : string): Array<Verification> | null{
+    assert(context.attachedDeposit >= u128.from(5), "5 NEAR is require")
     let profile = this.profilesList.get(accountID)
     if(profile != null)
     {
