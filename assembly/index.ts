@@ -19,16 +19,16 @@ export class Contract {
   }
 
 // This function returns the account that is linked to a given NEAR ID
-  @mutateState()
-  getProfile(accountID: string): Profile | null {
-    return this.profilesList.get(accountID)
-  }
+  // @mutateState()
+  // getProfile(accountID: string): Profile | null {
+  //   return this.profilesList.get(accountID)
+  // }
   
   // This function will be called by the front-end to add a verification method and only the "owner/admin" can access it
   // assuming that the admin id is Owner.testnet
   @mutateState()
   verifyAccount(accountID : string , VerificationMethod : Verification) : string{
-    let profile = this.getProfile(accountID)
+    let profile = this.profilesList.get(accountID)
     let adminProfile = "Owner.testnet"
     if(context.predecessor == adminProfile && profile != null)
     {
@@ -44,7 +44,7 @@ export class Contract {
 
   // This function acts as API to know if the account is Verified or not  
   isAccountVerified(accountID : string): bool{
-    let profile = this.getProfile(accountID)
+    let profile = this.profilesList.get(accountID)
     if(profile != null)
     {
       if(profile.verificationList.length == 0)
@@ -57,7 +57,7 @@ export class Contract {
 
 // This function return all the verification methods that this profile acquired
   getVerifications(accountID : string): Array<Verification> | null{
-    let profile = this.getProfile(accountID)
+    let profile = this.profilesList.get(accountID)
     if(profile != null)
     {
       if(profile.verificationList.length == 0)
