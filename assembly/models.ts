@@ -5,7 +5,7 @@ export class Profile {
     email : string;
     website : string;
     imageURL : string;
-    dateOfBirth : string;
+    dateOfBirth : u64;
     accountID : string;
     verificationLevel : u8 = 0;
 // A List that contains all the verification methods this profile acquired
@@ -13,7 +13,7 @@ export class Profile {
 
 // A constructor to intialize all the variables and set none added variables to "not found" (for the sake of testing only)
     constructor(name: string = "NotFound", bio: string= "NotFound", email: string= "NotFound", website: string= "NotFound", 
-                imageURL: string= "NotFound", dateOfBirth: string= "NotFound",accountID : string = "NotFound") {
+                imageURL: string= "NotFound", dateOfBirth: u64 = 11111 ,accountID : string = "NotFound") {
       this.name = name;
       this.bio = bio;
       this.email = email;
