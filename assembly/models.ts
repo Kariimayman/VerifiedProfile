@@ -5,7 +5,7 @@ export class Profile {
     email : string;
     website : string;
     imageURL : string;
-    dateOfBirth : ;
+    dateOfBirth : string;
     accountID : string;
     verificationLevel : u8 = 0;
 // A List that contains all the verification methods this profile acquired
