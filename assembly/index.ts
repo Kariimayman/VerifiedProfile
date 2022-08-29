@@ -45,8 +45,12 @@ export class Contract {
       {
         return false;
       }
+      else
+      {
+        return true;
+      }
     }
-    return true
+    return false
   }
 
 // This function return all the verification methods that this profile acquired
