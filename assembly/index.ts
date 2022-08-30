@@ -27,8 +27,7 @@ export class Contract {
     let profile = this.profilesList.get(accountID)
     let adminProfile = "Owner.testnet"
     assert(context.predecessor == adminProfile, "Access Denied")
-    assert(context.attachedDeposit.set(u128.from(1)), "1 NEAR is required")
-    //assert(context.attachedDeposit >= u128.from(1), "1 NEAR is required")
+    assert(context.attachedDeposit == u128.from(1), "1 NEAR is required")
     if(profile != null)
     {
       profile.verificationList.push(VerificationMethod)
@@ -56,8 +55,7 @@ export class Contract {
 
 // This function return all the verification methods that this profile acquired
   getVerifications(accountID : string): Array<Verification> | null{
-    assert(context.attachedDeposit.set(u128.from(5)), "5 NEAR is required")
-    //assert(context.attachedDeposit >= u128.from(5), "5 NEAR is required")
+    assert(context.attachedDeposit == u128.from(5), "5 NEAR is required")
     let profile = this.profilesList.get(accountID)
     if(profile != null)
     {
