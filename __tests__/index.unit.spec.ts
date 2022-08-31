@@ -1,14 +1,16 @@
 import { Contract } from "../assembly";
 import { VMContext } from "near-mock-vm";
 import { Profile, Verification } from "../assembly/models";
+import { u128} from "near-sdk-as";
+
 
 let profilee: Profile;
 let profileOrNull:Profile|null;
 let contractt: Contract;
 let verr: Verification;
-const CREATOR_ACCOUNT_ID = "ali";
+const CREATOR_ACCOUNT_ID = "someone";
 const CURRENT_ACCOUNT_ID = "someone";
-const PREDECESSOR_ACCOUNT_ID = "ali"
+const PREDECESSOR_ACCOUNT_ID = "someone";
 
 beforeAll(() => {
     contractt = new Contract();
@@ -34,6 +36,7 @@ describe("Getting a profile", () => {
 });
 
 describe("Verify an account", () => {
+    
 
     test("assertion", () => {
         if (profileOrNull!= null) 
@@ -42,8 +45,41 @@ describe("Verify an account", () => {
 
 
     test("verify account by the admin", () => {
+        VMContext.setPredecessor_account_id("Owner.testnet")
+        VMContext.setAttached_deposit(u128.from(1))
         expect(contractt.verifyAccount(CURRENT_ACCOUNT_ID, verr)).toBe("Account is missing")
     });
+});
+
+describe("Verify an account", () => {
+    test("verify account by the admin", () => {
+        VMContext.setPredecessor_account_id("Owner.testnet")
+        VMContext.setAttached_deposit(u128.from(1))
+        expect(contractt.verifyAccount(CURRENT_ACCOUNT_ID, verr)).toBe("Account is missing")
+    });
+});
+
+// describe("Deposit test", () => {
+
+//     test("NEAR deposit", () => {
+//         VMContext.setPredecessor_account_id("Owner.testnet")
+//         VMContext.setAttached_deposit(u128.from(0.5))
+//         expect(contractt.verifyAccount(CURRENT_ACCOUNT_ID, verr)).toThrow('1 NEAR is required')
+//     });
+// });
+
+
+describe("account verifcation", () => {
+    test("Check if account is verified ", () => {
+        contractt.createProfile(profilee)
+        let testprofile = contractt.getProfile(CURRENT_ACCOUNT_ID)
+        if(testprofile != null)
+        {
+            contractt.verifyAccount(CURRENT_ACCOUNT_ID,verr)
+        }
+        expect(contractt.isAccountVerified(CURRENT_ACCOUNT_ID)).toBeTruthy()
+    });
+    
 });
 
 
