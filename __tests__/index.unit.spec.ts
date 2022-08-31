@@ -28,8 +28,9 @@ describe("Creating a profile", () => {
 describe("Getting a profile", () => {
     test("returns the account that is linked to a given NEAR ID", () => {
 
-        expect(contractt.getProfile(CURRENT_ACCOUNT_ID)).toBe(contractt.profilesList.get(CURRENT_ACCOUNT_ID))
-        
+        expect(contractt.profilesList.get(CURRENT_ACCOUNT_ID)).toBe(CURRENT_ACCOUNT_ID)
+        // const proffile = contractt.getProfile(CREATOR_ACCOUNT_ID)
+        // expect(proffile?.accountID).toBe(PREDECESSOR_ACCOUNT_ID)
     });
 });
 
