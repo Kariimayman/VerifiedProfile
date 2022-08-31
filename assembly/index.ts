@@ -26,8 +26,8 @@ export class Contract {
   verifyAccount(accountID : string , VerificationMethod : Verification) : string{
     let profile = this.profilesList.get(accountID)
     let adminProfile = "Owner.testnet"
-    assert(context.predecessor == adminProfile, "Access Denied")
     assert(context.attachedDeposit == u128.from(1), "1 NEAR is required")
+    assert(context.predecessor == adminProfile, "Access Denied")
     if(profile != null)
     {
       profile.verificationList.push(VerificationMethod)
