@@ -10,7 +10,7 @@ export class Profile {
 // A List that contains all the verification methods this profile acquired
     verificationList: Array<Verification> = new Array<Verification>(0)
 
-// A constructor to intialize all the variables and set none added variables to "not found" (for the sake of testing only)
+// A constructor to intialize all the variables 
     constructor(name: string , bio: string, email: string, website: string, 
                 imageURL: string ,dateOfBirth: u64) {
       this.name = name;
