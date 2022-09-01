@@ -5,7 +5,6 @@ import { u128} from "near-sdk-as";
 
 
 let profilee: Profile;
-let profileOrNull:Profile|null;
 let contractt: Contract;
 let verr: Verification;
 const CREATOR_ACCOUNT_ID = "someone.NEAR";
@@ -43,13 +42,33 @@ beforeAll(() => {
 //         expect(contractt.verifyAccount(CURRENT_ACCOUNT_ID, verr)).toBe("Account Verified Successfully")
 //     });
 
+// describe("Creating a profile", () => {
+//     test("Create a profile", () => {
+        
+//         let createAprofile = contractt.createProfile("Name", "bio", "email", "website", "imageURL", 11111 ,CURRENT_ACCOUNT_ID)
+//         expect(contractt.createProfile).toBe(createAprofile)
 
+//     });
+// });
+
+describe("Getting a profile", () => {
+    test("returns the account that is linked to a given NEAR ID", () => {
+
+        expect(contractt.profilesList.get(CURRENT_ACCOUNT_ID)).toBe(CURRENT_ACCOUNT_ID)
+        //When I run this I have an error 
+        // const proffile = contractt.getProfile(CREATOR_ACCOUNT_ID)
+        // expect(proffile?.accountID).toBe(PREDECESSOR_ACCOUNT_ID)
+    });
+});
+
+//describe("Verify an account", () => {
 //     test("verify account by the admin", () => {
 //         VMContext.setPredecessor_account_id("Owner.testnet")
 //         VMContext.setAttached_deposit(u128.from(1))
 //         expect(contractt.verifyAccount(CURRENT_ACCOUNT_ID, verr)).toBe("Account is missing")
 //     });
 // });
+
 
 // describe("Verify an account", () => {
 //     test("verify account by the admin", () => {
@@ -58,6 +77,15 @@ beforeAll(() => {
 //         expect(contractt.verifyAccount(CURRENT_ACCOUNT_ID, verr)).toBe("Account is missing")
 //     });
 // });
+
+describe("Verify an account", () => {
+    test("verify account by the admin", () => {
+        VMContext.setPredecessor_account_id("Owner.testnet")
+        VMContext.setAttached_deposit(u128.from(1))
+        expect(contractt.verifyAccount(CURRENT_ACCOUNT_ID, verr)).toBe("Account is missing")
+    });
+});
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 describe("Deposit test", () => {
@@ -139,22 +167,3 @@ describe("isAccountVerified function", () => {
         expect(contractt.isAccountVerified(CURRENT_ACCOUNT_ID)).toBeTruthy()
     }); 
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
