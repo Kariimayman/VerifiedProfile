@@ -8,55 +8,42 @@ export class Contract {
 
   // This functions checks if the profile is already linked to this near account or not, if it isn't then it creates as new profile
   @mutateState()
-  createProfile( name: string,
-    bio: string,
-    email : string,
-    website : string,
-    imageURL : string,
-    dateOfBirth : u64,
-    accountID : string): Profile {
-    let profile = new Profile(name,bio,email,website,imageURL,dateOfBirth,accountID)
-    assert(!this.profilesList.contains(accountID), "This NEAR ID is already linked to another account")
-    this.profilesList.set(accountID,  profile)
+  createProfile( profile : Profile): Profile {
+    profile.accountID = context.sender
+    assert(!this.profilesList.contains(profile.accountID), "This NEAR ID is already linked to another account")
+    this.profilesList.set(profile.accountID,  profile)
     return profile
   }
 
 // This function returns the account that is linked to a given NEAR ID
-  getProfile(accountID: string): Profile | null {
-    return this.profilesList.get(accountID)
+  getProfile(accountID: string): Profile  {
+    return this.profilesList.getSome(accountID)
   }
   
   // This function will be called by the front-end to add a verification method and only the "owner/admin" can access it
   // assuming that the admin id is Owner.testnet
   @mutateState()
-  verifyAccount(accountID : string , VerificationMethod : Verification) : Profile | null{
-    let profile = this.profilesList.get(accountID)
+  verifyAccount(accountID : string , VerificationMethod : Verification) : Profile{
+    let profile = this.profilesList.getSome(accountID)
     let adminProfile = "Owner.testnet"
     assert(context.attachedDeposit == u128.from(1), "1 NEAR is required")
     assert(context.predecessor == adminProfile, "Access Denied")
-    if(profile != null)
-    {
-      profile.verificationList.push(VerificationMethod)
-      return profile
-    }
-    return null;
+    profile.verificationList.push(VerificationMethod)
+    return profile
+
   }
 
   // This function acts as API to know if the account is Verified or not
   isAccountVerified(accountID : string): bool{
-    let profile = this.profilesList.get(accountID)
-    if(profile != null)
+    let profile = this.profilesList.getSome(accountID)
+    if(profile.verificationList.length == 0)
     {
-      if(profile.verificationList.length == 0)
-      {
-        return false;
-      }
-      else
-      {
-        return true;
-      }
+      return false;
     }
-    return false;
+    else
+    {
+      return true;
+    }
   }
 
 // This function return all the verification methods that this profile acquired

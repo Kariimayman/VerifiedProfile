@@ -11,15 +11,14 @@ export class Profile {
     verificationList: Array<Verification> = new Array<Verification>(0)
 
 // A constructor to intialize all the variables and set none added variables to "not found" (for the sake of testing only)
-    constructor(name: string = "NotFound", bio: string= "NotFound", email: string= "NotFound", website: string= "NotFound", 
-                imageURL: string= "NotFound", dateOfBirth: u64 = 11111 ,accountID : string = "NotFound") {
+    constructor(name: string , bio: string, email: string, website: string, 
+                imageURL: string ,dateOfBirth: u64) {
       this.name = name;
       this.bio = bio;
       this.email = email;
       this.website = website;
       this.imageURL = imageURL; 
       this.dateOfBirth = dateOfBirth;
-      this.accountID = accountID;
     }
 
     getVerificationLevel() : u8
@@ -42,7 +41,7 @@ export class Verification{
     level : u8;
     description : string
     
-    constructor(provider : string = "Notfound", level : u8 = 0, description : string  ="not found")
+    constructor(provider : string, level : u8 , description : string )
     {
         this.level = level
         this.provider = provider
