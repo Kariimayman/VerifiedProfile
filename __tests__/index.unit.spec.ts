@@ -21,8 +21,8 @@ beforeAll(() => {
 // describe("Creating a profile", () => {
 //     test("Create a profile", () => {
         
-//         let testProfile = contractt.createProfile("Name", "bio", "email", "website", "imageURL", 11111 ,CURRENT_ACCOUNT_ID)
-//         expect(contractt.createProfile).toBe(testProfile)
+//         let createAprofile = contractt.createProfile("Name", "bio", "email", "website", "imageURL", 11111 ,CURRENT_ACCOUNT_ID)
+//         expect(contractt.createProfile).toBe(createAprofile)
 
 //     });
 // });
