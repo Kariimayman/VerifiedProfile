@@ -51,15 +51,15 @@ beforeAll(() => {
 //     });
 // });
 
-describe("Getting a profile", () => {
-    test("returns the account that is linked to a given NEAR ID", () => {
+// describe("Getting a profile", () => {
+//     test("returns the account that is linked to a given NEAR ID", () => {
 
-        expect(contractt.profilesList.get(CURRENT_ACCOUNT_ID)).toBe(CURRENT_ACCOUNT_ID)
-        //When I run this I have an error 
-        // const proffile = contractt.getProfile(CREATOR_ACCOUNT_ID)
-        // expect(proffile?.accountID).toBe(PREDECESSOR_ACCOUNT_ID)
-    });
-});
+//         expect(contractt.profilesList.get(CURRENT_ACCOUNT_ID)).toBe(CURRENT_ACCOUNT_ID)
+//         //When I run this I have an error 
+//         // const proffile = contractt.getProfile(CREATOR_ACCOUNT_ID)
+//         // expect(proffile?.accountID).toBe(PREDECESSOR_ACCOUNT_ID)
+//     });
+// });
 
 //describe("Verify an account", () => {
 //     test("verify account by the admin", () => {
@@ -78,13 +78,6 @@ describe("Getting a profile", () => {
 //     });
 // });
 
-describe("Verify an account", () => {
-    test("verify account by the admin", () => {
-        VMContext.setPredecessor_account_id("Owner.testnet")
-        VMContext.setAttached_deposit(u128.from(1))
-        expect(contractt.verifyAccount(CURRENT_ACCOUNT_ID, verr)).toBe("Account is missing")
-    });
-});
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
