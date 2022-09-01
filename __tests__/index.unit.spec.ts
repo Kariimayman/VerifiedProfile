@@ -5,7 +5,6 @@ import { u128} from "near-sdk-as";
 
 
 let profilee: Profile;
-let profileOrNull:Profile|null;
 let contractt: Contract;
 let verr: Verification;
 const CREATOR_ACCOUNT_ID = "someone.NEAR";
@@ -20,8 +19,11 @@ beforeAll(() => {
 });
 
 // describe("Creating a profile", () => {
-//     test("should print the statement 'Account Created Successfully'", () => {
-//         expect(contractt.createProfile(profilee)).toBe("Account Created Successfully")
+//     test("Create a profile", () => {
+        
+//         let testProfile = contractt.createProfile("Name", "bio", "email", "website", "imageURL", 11111 ,CURRENT_ACCOUNT_ID)
+//         expect(contractt.createProfile).toBe(testProfile)
+
 //     });
 // });
 
@@ -36,13 +38,6 @@ describe("Getting a profile", () => {
 });
 
 describe("Verify an account", () => {
-    
-
-    test("assertion", () => {
-        if (profileOrNull!= null) 
-        expect(contractt.verifyAccount(CURRENT_ACCOUNT_ID, verr)).toBe("Account Verified Successfully")
-    });
-
 
     test("verify account by the admin", () => {
         VMContext.setPredecessor_account_id("Owner.testnet")
@@ -58,6 +53,7 @@ describe("Verify an account", () => {
         expect(contractt.verifyAccount(CURRENT_ACCOUNT_ID, verr)).toBe("Account is missing")
     });
 });
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 describe("Deposit test", () => {
@@ -148,22 +144,3 @@ describe("isAccountVerified function", () => {
         expect(contractt.isAccountVerified(CURRENT_ACCOUNT_ID)).toBeTruthy()
     }); 
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
