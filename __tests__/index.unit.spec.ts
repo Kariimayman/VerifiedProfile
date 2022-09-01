@@ -8,9 +8,9 @@ let profilee: Profile;
 let profileOrNull:Profile|null;
 let contractt: Contract;
 let verr: Verification;
-const CREATOR_ACCOUNT_ID = "someone";
-const CURRENT_ACCOUNT_ID = "someone";
-const PREDECESSOR_ACCOUNT_ID = "someone";
+const CREATOR_ACCOUNT_ID = "someone.NEAR";
+const CURRENT_ACCOUNT_ID = "someone.NEAR";
+const PREDECESSOR_ACCOUNT_ID = "someone.NEAR";
 
 beforeAll(() => {
     contractt = new Contract();
@@ -19,13 +19,11 @@ beforeAll(() => {
     VMContext.setPredecessor_account_id(PREDECESSOR_ACCOUNT_ID);
 });
 
-describe("Creating a profile", () => {
-    test("should print the statement 'Account Created Successfully'", () => {
-
-        expect(contractt.createProfile(profilee)).toBe("Account Created Successfully")
-        
-    });
-});
+// describe("Creating a profile", () => {
+//     test("should print the statement 'Account Created Successfully'", () => {
+//         expect(contractt.createProfile(profilee)).toBe("Account Created Successfully")
+//     });
+// });
 
 describe("Getting a profile", () => {
     test("returns the account that is linked to a given NEAR ID", () => {
@@ -60,28 +58,95 @@ describe("Verify an account", () => {
         expect(contractt.verifyAccount(CURRENT_ACCOUNT_ID, verr)).toBe("Account is missing")
     });
 });
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// describe("Deposit test", () => {
+describe("Deposit test", () => {
+    test("Check if there is enough NEAR deposit", () => {
+        VMContext.setPredecessor_account_id("Owner.testnet")
+        VMContext.setAttached_deposit(u128.from(0.5))
+        expect(() =>{contractt.verifyAccount(CURRENT_ACCOUNT_ID, verr)}).toThrow('1 NEAR is required')
+    });
+});
 
-//     test("NEAR deposit", () => {
-//         VMContext.setPredecessor_account_id("Owner.testnet")
-//         VMContext.setAttached_deposit(u128.from(0.5))
-//         expect(contractt.verifyAccount(CURRENT_ACCOUNT_ID, verr)).toThrow('1 NEAR is required')
-//     });
-// });
+describe("Check account creation", () => {
+    test("Check if The account is created successfully", () => {
+        VMContext.setAttached_deposit(u128.from(1))
+        let testprofile = contractt.createProfile("Name", "bio", "email", "website", "imageURL", 11111 ,CURRENT_ACCOUNT_ID )
+        expect(testprofile.accountID).toBe(CURRENT_ACCOUNT_ID)
+    }); 
+});
 
-
-describe("account verifcation", () => {
-    test("Check if account is verified ", () => {
-        contractt.createProfile(profilee)
-        let testprofile = contractt.getProfile(CURRENT_ACCOUNT_ID)
-        if(testprofile != null)
-        {
-            contractt.verifyAccount(CURRENT_ACCOUNT_ID,verr)
-        }
-        expect(contractt.isAccountVerified(CURRENT_ACCOUNT_ID)).toBeTruthy()
+describe("Check profileList", () => {
+    test("Check if The account is added to profilelist", () => {
+        VMContext.setAttached_deposit(u128.from(1))
+        contractt.createProfile("Name", "bio", "email", "website", "imageURL", 11111 ,CURRENT_ACCOUNT_ID )
+        expect(contractt.profilesList.contains(CURRENT_ACCOUNT_ID)).toBeTruthy
     });
     
+});
+
+describe("Check account id", () => {
+    test("Check if The account id is set correctly", () => {
+        VMContext.setAttached_deposit(u128.from(1))
+        contractt.createProfile("Name", "bio", "email", "website", "imageURL", 11111 ,CURRENT_ACCOUNT_ID )
+        let testProfile = contractt.getProfile(CURRENT_ACCOUNT_ID)
+        if(testProfile != null)
+        {
+            expect(testProfile.accountID).toBe("someone.NEAR")
+        }
+        else
+        {
+            expect(testProfile).not.toBe(null)
+        }  
+    });
+});
+describe("account verification", () => {
+    test("Check if account is verification is set successfully", () => {
+        VMContext.setAttached_deposit(u128.from(1))
+        let verification = new Verification()
+        contractt.createProfile("Name", "bio", "email", "website", "imageURL", 11111 ,CURRENT_ACCOUNT_ID )
+        VMContext.setPredecessor_account_id("Owner.testnet")
+        let testProfile = contractt.verifyAccount(CURRENT_ACCOUNT_ID,verification)
+        if(testProfile != null)
+        {
+            expect(testProfile.accountID).toBe("someone.NEAR")
+        }
+        else
+        {
+            expect(testProfile).not.toBe(null)
+        }  
+    });
+    
+});
+
+describe("Check on verificationList", () => {
+    test("Check if verifications are added to the verificationList successfully", () => {
+        VMContext.setAttached_deposit(u128.from(1))
+        let verification = new Verification()
+        contractt.createProfile("Name", "bio", "email", "website", "imageURL", 11111 ,CURRENT_ACCOUNT_ID )
+        VMContext.setPredecessor_account_id("Owner.testnet")
+        let testProfile = contractt.verifyAccount(CURRENT_ACCOUNT_ID,verification)
+        if(testProfile != null)
+        {
+            expect(testProfile.verificationList.length).toBe(1)
+        }
+        else
+        {
+            expect(testProfile).not.toBe(null)
+        }  
+    });
+    
+});
+
+describe("isAccountVerified function", () => {
+    test("Check if the function isAccountVerified works probably", () => {
+        VMContext.setAttached_deposit(u128.from(1))
+        let verification = new Verification()
+        contractt.createProfile("Name", "bio", "email", "website", "imageURL", 11111 ,CURRENT_ACCOUNT_ID )
+        VMContext.setPredecessor_account_id("Owner.testnet")
+        contractt.verifyAccount(CURRENT_ACCOUNT_ID,verification)
+        expect(contractt.isAccountVerified(CURRENT_ACCOUNT_ID)).toBeTruthy()
+    }); 
 });
 
 

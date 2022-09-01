@@ -8,11 +8,17 @@ export class Contract {
 
   // This functions checks if the profile is already linked to this near account or not, if it isn't then it creates as new profile
   @mutateState()
-  createProfile(profile : Profile): string {
-    let accountID = context.sender
+  createProfile( name: string,
+    bio: string,
+    email : string,
+    website : string,
+    imageURL : string,
+    dateOfBirth : u64,
+    accountID : string): Profile {
+    let profile = new Profile(name,bio,email,website,imageURL,dateOfBirth,accountID)
     assert(!this.profilesList.contains(accountID), "This NEAR ID is already linked to another account")
     this.profilesList.set(accountID,  profile)
-    return "Account Created Successfully"
+    return profile
   }
 
 // This function returns the account that is linked to a given NEAR ID
@@ -23,7 +29,7 @@ export class Contract {
   // This function will be called by the front-end to add a verification method and only the "owner/admin" can access it
   // assuming that the admin id is Owner.testnet
   @mutateState()
-  verifyAccount(accountID : string , VerificationMethod : Verification) : string{
+  verifyAccount(accountID : string , VerificationMethod : Verification) : Profile | null{
     let profile = this.profilesList.get(accountID)
     let adminProfile = "Owner.testnet"
     assert(context.attachedDeposit == u128.from(1), "1 NEAR is required")
@@ -31,9 +37,9 @@ export class Contract {
     if(profile != null)
     {
       profile.verificationList.push(VerificationMethod)
-      return "Account Verified Successfully"
+      return profile
     }
-    return "Account is missing"
+    return null;
   }
 
   // This function acts as API to know if the account is Verified or not
@@ -50,7 +56,7 @@ export class Contract {
         return true;
       }
     }
-    return false
+    return false;
   }
 
 // This function return all the verification methods that this profile acquired
