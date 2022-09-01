@@ -19,9 +19,13 @@ beforeAll(() => {
 });
 
 describe("Creating a profile", () => {
-    test("should print the statement 'Account Created Successfully'", () => {
+    test("'Account Created Successfully'", () => {
 
-        expect(contractt.createProfile(profilee)).toBe("Account Created Successfully")
+        VMContext.setSigner_account_id(CREATOR_ACCOUNT_ID)
+        let newProfile = new Profile("Name", "bio", "email", "website", "imageURL", 455454)
+        let createdProfile = contractt.createProfile(newProfile)
+        
+        expect(createdProfile.accountID).toBe(CREATOR_ACCOUNT_ID)
     });
 });
 
