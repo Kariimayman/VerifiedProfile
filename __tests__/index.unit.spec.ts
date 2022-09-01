@@ -24,15 +24,22 @@ beforeAll(() => {
 // //     });
 // // });
 
-// describe("Getting a profile", () => {
-//     test("returns the account that is linked to a given NEAR ID", () => {
+describe("Getting a profile", () => {
+    test("returns the account that is linked to a given NEAR ID", () => {
 
-//         expect(contractt.profilesList.get(CURRENT_ACCOUNT_ID)).toBe(CURRENT_ACCOUNT_ID)
-//         //When I run this I have an error 
-//         // const proffile = contractt.getProfile(CREATOR_ACCOUNT_ID)
-//         // expect(proffile?.accountID).toBe(PREDECESSOR_ACCOUNT_ID)
-//     });
-// });
+        VMContext.setSigner_account_id("someone.NEAR")
+       let newProfile = new Profile("Name", "bio", "email", "website", "imageURL", 11111)
+       expect(contractt.createProfile(newProfile).accountID).toBe(newProfile.accountID);
+       
+       let createdProfile = contractt.getProfile(CURRENT_ACCOUNT_ID);
+        expect(createdProfile.name).toBe(newProfile.name);
+        expect(createdProfile.bio).toBe(newProfile.bio);
+        expect(createdProfile.email).toBe(newProfile.email);
+        expect(createdProfile.website).toBe(newProfile.website);
+        expect(createdProfile.imageURL).toBe(newProfile.imageURL);
+        expect(createdProfile.dateOfBirth).toBe(newProfile.dateOfBirth);
+    });
+});
 
 // describe("Verify an account", () => {
     
