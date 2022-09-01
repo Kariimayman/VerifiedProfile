@@ -3,13 +3,11 @@ import { VMContext } from "near-mock-vm";
 import { Profile, Verification } from "../assembly/models";
 import { u128} from "near-sdk-as";
 
-
-let profilee: Profile;
 let contractt: Contract;
 let verr: Verification;
 const CREATOR_ACCOUNT_ID = "someone.NEAR";
 const CURRENT_ACCOUNT_ID = "someone.NEAR";
-const PREDECESSOR_ACCOUNT_ID = "someone.NEAR";
+const PREDECESSOR_ACCOUNT_ID = "Owner.testnet";
 
 beforeAll(() => {
     contractt = new Contract();
@@ -18,25 +16,31 @@ beforeAll(() => {
     VMContext.setPredecessor_account_id(PREDECESSOR_ACCOUNT_ID);
 });
 
+
 describe("Creating a profile", () => {
     test("'Account Created Successfully'", () => {
 
+        VMContext.setAttached_deposit(u128.from(1))
         VMContext.setSigner_account_id(CREATOR_ACCOUNT_ID)
         let newProfile = new Profile("Name", "bio", "email", "website", "imageURL", 455454)
         let createdProfile = contractt.createProfile(newProfile)
         
         expect(createdProfile.accountID).toBe(CREATOR_ACCOUNT_ID)
+
     });
 });
 
 describe("Getting a profile", () => {
     test("returns the account that is linked to a given NEAR ID", () => {
 
+        VMContext.setAttached_deposit(u128.from(1))
         VMContext.setSigner_account_id("someone.NEAR")
-       let newProfile = new Profile("Name", "bio", "email", "website", "imageURL", 11111)
-       expect(contractt.createProfile(newProfile).accountID).toBe(newProfile.accountID);
-       
-       let createdProfile = contractt.getProfile(CURRENT_ACCOUNT_ID);
+        let newProfile = new Profile("Name", "bio", "email", "website", "imageURL", 11111)
+
+        expect(contractt.createProfile(newProfile).accountID).toBe(newProfile.accountID);
+
+        let createdProfile = contractt.getProfile(CURRENT_ACCOUNT_ID);
+
         expect(createdProfile.name).toBe(newProfile.name);
         expect(createdProfile.bio).toBe(newProfile.bio);
         expect(createdProfile.email).toBe(newProfile.email);
@@ -46,23 +50,23 @@ describe("Getting a profile", () => {
     });
 });
 
-// describe("Verify an account", () => {
+describe("Verify an account", () => {
     
+    test("Account is verified", () => {
 
-//     test("assertion", () => {
-//         if (profileOrNull!= null) 
-//         expect(contractt.verifyAccount(CURRENT_ACCOUNT_ID, verr)).toBe("Account Verified Successfully")
-//     });
+        VMContext.setAttached_deposit(u128.from(1))
+        VMContext.setSigner_account_id(CURRENT_ACCOUNT_ID)
+        VMContext.setPredecessor_account_id(PREDECESSOR_ACCOUNT_ID)
 
+        let verification = new Verification("linkedIn", 3 , "WTF! It's Wonderful" )
+        let profile = new Profile("Name", "bio", "email", "website", "imageURL", 89895585)
+        contractt.createProfile(profile)
+        let createdProfile = contractt.verifyAccount(CURRENT_ACCOUNT_ID,verification)
+    
+        expect(createdProfile.accountID).toBe(CURRENT_ACCOUNT_ID)
 
-// describe("Verify an account", () => {
-//     test("verify account by the admin", () => {
-//         VMContext.setPredecessor_account_id("Owner.testnet")
-//         VMContext.setAttached_deposit(u128.from(1))
-//         expect(contractt.verifyAccount(CURRENT_ACCOUNT_ID, verr)).toBe("Account is missing")
-//     });
-// });
-
+    });
+});
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -106,7 +110,7 @@ describe("Check account id", () => {
     });
 });
 describe("account verification", () => {
-    test("Check if account is verification is set successfully", () => {
+    test("Check if account verification is set successfully", () => {
         VMContext.setAttached_deposit(u128.from(1))
         VMContext.setSigner_account_id("someone.NEAR")
         let verification = new Verification("facebook", 1 , "amazing" )
