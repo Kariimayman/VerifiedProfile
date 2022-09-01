@@ -29,6 +29,7 @@ export class Contract {
     assert(context.attachedDeposit == u128.from(1), "1 NEAR is required")
     assert(context.predecessor == adminProfile, "Access Denied")
     profile.verificationList.push(VerificationMethod)
+    this.profilesList.set(accountID, profile)
     return profile
 
   }
