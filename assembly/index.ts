@@ -21,13 +21,13 @@ export class Contract {
     let adminProfile = "Owner.testnet"
     assert(this.profilesList.contains(accountID), "This NEAR ID is missing")
     assert(context.predecessor == adminProfile, "Access Denied")
-    assert(context.attachedDeposit == u128.from(1), "1 NEAR is required")
     this.profilesList.set(accountID, true)
     return accountID
   }
 
   // This function acts as API to know if the account is Verified or not
   isAccountVerified(accountID : string): bool{
+    assert(context.attachedDeposit == u128.from(1), "1 NEAR is required")
     return this.profilesList.getSome(accountID)
   }
 
