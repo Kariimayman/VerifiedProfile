@@ -24,8 +24,8 @@ export class Contract {
   @mutateState()
   verifyAccount(accountID : string, verification : verificationType ) : string{
     let adminProfile = "Owner.testnet"
-    assert(this.profilesList.contains(accountID), "This NEAR ID is missing")
     assert(context.predecessor == adminProfile, "Access Denied")
+    assert(this.profilesList.contains(accountID), "This NEAR ID is missing")
     this.profilesList.set(accountID, verification)
     return accountID
   }
