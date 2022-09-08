@@ -19,7 +19,7 @@ export class Contract {
     let accountID = context.sender
     assert(!this.profilesList.contains(accountID), "This NEAR ID is already linked to another account")
     this.profilesList.set(accountID, verificationType.New)
-    this.usersAccountsId.push(accountID)
+    this.usersAccountsId.push(accountID)  // Storage Users' Accounts IDs 
     return accountID
   }
 
@@ -39,9 +39,14 @@ export class Contract {
     return this.profilesList.getSome(accountID).toString()
   }
   
-  // This function returns users accounts ID
-  getusers(accountID : string) : array<string> {
-    
-   return 
+  // This function returns users' accounts ID
+  getusers() : Array<string> {
+    let users = new Array<string>(this.usersAccountsId.length)
+    for (let i = 0; i < this.usersAccountsId.length; i++) {
+      let user = this.usersAccountsId[i];
+      users[i] = user;
+    }
+    return users;
   } 
+ 
 }
