@@ -10,6 +10,8 @@ export const enum verificationType {
 export class Contract {
   // A List that contains all the registered profiles
   profilesList : PersistentMap<string, verificationType> = new PersistentMap<string, verificationType>("P");
+  // A List contains all accounts ID
+  usersAccountsId : PersistentMap<string, string> = new PersistentMap<string, string>("U");
 
   // This functions checks if the profile is already linked to this near account or not, if it isn't then it creates as new profile
   @mutateState()
@@ -17,6 +19,7 @@ export class Contract {
     let accountID = context.sender
     assert(!this.profilesList.contains(accountID), "This NEAR ID is already linked to another account")
     this.profilesList.set(accountID, verificationType.New)
+    this.usersAccountsId.set(accountID, accountID)
     return accountID
   }
 
@@ -27,6 +30,7 @@ export class Contract {
     assert(context.predecessor == adminProfile, "Access Denied")
     assert(this.profilesList.contains(accountID), "This NEAR ID is missing")
     this.profilesList.set(accountID, verification)
+    this.usersAccountsId.set(accountID, accountID)
     return accountID
   }
 
@@ -36,4 +40,10 @@ export class Contract {
     return this.profilesList.getSome(accountID)
   }
 
+  
+  // This function returns users accounts ID
+  getusers(accountID : string) : string | null{
+    
+   return this.usersAccountsId.get(accountID, accountID)
+  }
 }
