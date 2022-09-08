@@ -162,7 +162,7 @@ describe("isAccountVerified function", () => {
         contractt.createProfile()
         VMContext.setAttached_deposit(u128.from(1))
         VMContext.setPredecessor_account_id("Owner.testnet")
-        contractt.verifyAccount("someone.NEAR" , 5)
-        expect(contractt.isAccountVerified("someone.NEAR")).toBe(5)
+        contractt.verifyAccount("someone.NEAR" , 2)
+        expect(contractt.isAccountVerified("someone.NEAR")).toBe("2")
     }); 
 });

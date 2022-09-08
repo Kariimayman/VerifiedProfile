@@ -35,15 +35,24 @@ export class Contract {
   }
 
   // This function acts as API to know if the account is Verified or not
-  isAccountVerified(accountID : string): verificationType{
+  isAccountVerified(accountID : string): string{
     assert(context.attachedDeposit == u128.from(1), "1 NEAR is required")
-    return this.profilesList.getSome(accountID)
+    return this.profilesList.getSome(accountID).toString()
   }
 
+<<<<<<< Updated upstream
   
   // This function returns users accounts ID
   getusers(accountID : string) : string | null{
     
    return this.usersAccountsId.get(accountID, accountID)
   }
+=======
+  // getProfileList() : Array<string>{
+  //   let keys = new Array<string>
+  //   keys  = this.profilesList.keys()
+  //   return keys
+  // }
+
+>>>>>>> Stashed changes
 }
