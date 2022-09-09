@@ -36,7 +36,28 @@ export class Contract {
   // This function acts as API to know if the account is Verified or not
   isAccountVerified(accountID : string): string{
     assert(context.attachedDeposit >= u128.from(1) , "1 NEAR is required")
-    return this.profilesList.getSome(accountID).toString()
+    let verificationType = this.profilesList.getSome(accountID)
+    if(verificationType == 0)
+    {
+      return "New"
+    }
+    else if(verificationType == 1)
+    {
+      return "Pending"
+    }
+    else if(verificationType == 2)
+    {
+      return "Rejected"
+    }
+    else if(verificationType == 3)
+    {
+      return "Verified"
+    }
+    else if(verificationType == 4)
+    {
+      return "Spam"
+    }
+    return "Not Defined";
   }
   
   // This function returns users' accounts ID
