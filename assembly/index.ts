@@ -35,7 +35,7 @@ export class Contract {
 
   // This function acts as API to know if the account is Verified or not
   isAccountVerified(accountID : string): string{
-    assert(context.attachedDeposit >= u128.from(1), "1 NEAR is required")
+    assert(context.attachedDeposit >= u128.from(1) , "1 NEAR is required")
     return this.profilesList.getSome(accountID).toString()
   }
   
