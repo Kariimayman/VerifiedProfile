@@ -18,7 +18,7 @@ export class Contract {
   createProfile() : string {
     let accountID = context.sender
     assert(!this.profilesList.contains(accountID), "This NEAR ID is already linked to another account")
-    this.profilesList.set(accountID, verificationType.New)
+    this.profilesList.set(accountID, 0)
     this.usersAccountsId.push(accountID)  // Storage Users' Accounts IDs 
     return accountID
   }
