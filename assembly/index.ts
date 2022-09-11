@@ -61,7 +61,7 @@ export class Contract {
   }
   
   // This function returns users' accounts ID
-  getusers() : Array<string> {
+  getUsers() : Array<string> {
     let users = new Array<string>(this.usersAccountsId.length)
     for (let i = 0; i < this.usersAccountsId.length; i++) {
       let user = this.usersAccountsId[i];
