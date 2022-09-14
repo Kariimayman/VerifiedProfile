@@ -32,10 +32,9 @@ export class Contract {
     this.profilesList.set(accountID, verification)
     return accountID
   }
-
-  // This function acts as API to know if the account is Verified or not
-  isAccountVerified(accountID : string): string{
-    assert(context.attachedDeposit >= u128.from(1) , "1 NEAR is required")
+  verificationPerUser(accountID : string): string
+  {
+    assert(context.predecessor == accountID, "Access Denied")
     let verificationType = this.profilesList.getSome(accountID)
     if(verificationType == 0)
     {
@@ -59,9 +58,17 @@ export class Contract {
     }
     return "Not Defined";
   }
+  // This function acts as API to know if the account is Verified or not
+  isAccountVerified(accountID : string): string{
+    assert(context.attachedDeposit >= u128.from(1) , "1 NEAR is required")
+    let verification = this.verificationPerUser(accountID)
+    return verification
+  }
   
   // This function returns users' accounts ID
   getusers() : Array<string> {
+    let adminProfile = "kareemayman.testnet"
+    assert(context.predecessor == adminProfile, "Access Denied")
     let users = new Array<string>(this.usersAccountsId.length)
     for (let i = 0; i < this.usersAccountsId.length; i++) {
       let user = this.usersAccountsId[i];
@@ -69,5 +76,19 @@ export class Contract {
     }
     return users;
   } 
+
+  // getPendingUsers() : Array<string> {
+  //   let adminProfile = "kareemayman.testnet"
+  //   assert(context.predecessor == adminProfile, "Access Denied")
+  //   let users = new Array<string>(0)
+  //   for (let i = 0; i < this.usersAccountsId.length; i++) {
+  //     let Vtype = this.verificationPerUser(this.usersAccountsId[i])
+  //     if(Vtype === "Pending")
+  //     {
+  //       users.push(this.usersAccountsId[i])
+  //     }
+  //   }
+  //   return users;
+  // } 
  
 }
