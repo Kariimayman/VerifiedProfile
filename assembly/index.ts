@@ -66,13 +66,9 @@ export class Contract {
   }
   
   // This function returns users' accounts ID
-<<<<<<< HEAD
   getusers() : Array<string> {
     let adminProfile = "kareemayman.testnet"
     assert(context.predecessor == adminProfile, "Access Denied")
-=======
-  getUsers() : Array<string> {
->>>>>>> 9715c2aa461d36c12a9fc5c0bb29c2548cde5806
     let users = new Array<string>(this.usersAccountsId.length)
     for (let i = 0; i < this.usersAccountsId.length; i++) {
       let user = this.usersAccountsId[i];
