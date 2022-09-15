@@ -77,18 +77,18 @@ export class Contract {
     return users;
   } 
 
-  // getPendingUsers() : Array<string> {
-  //   let adminProfile = "kareemayman.testnet"
-  //   assert(context.predecessor == adminProfile, "Access Denied")
-  //   let users = new Array<string>(0)
-  //   for (let i = 0; i < this.usersAccountsId.length; i++) {
-  //     let Vtype = this.verificationPerUser(this.usersAccountsId[i])
-  //     if(Vtype === "Pending")
-  //     {
-  //       users.push(this.usersAccountsId[i])
-  //     }
-  //   }
-  //   return users;
-  // } 
+  getPendingUsers() : Array<string> {
+    let adminProfile = "kareemayman.testnet"
+    assert(context.predecessor == adminProfile, "Access Denied")
+    let users = new Array<string>(0)
+    for (let i = 0; i < this.usersAccountsId.length; i++) {
+      let Vtype = this.verificationPerUser(this.usersAccountsId[i])
+      if(Vtype === "Pending")
+      {
+        users.push(this.usersAccountsId[i])
+      }
+    }
+    return users;
+  } 
  
 }
