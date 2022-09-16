@@ -12,6 +12,8 @@ export class Contract {
   profilesList : PersistentMap<string, verificationType> = new PersistentMap<string, verificationType>("P");
   // A List contains all accounts ID
   usersAccountsId : PersistentVector<string> = new PersistentVector<string>("U");
+  adminList : Array<string> = ["kareemayman.testnet", "aliabdallah.testnet", "mhassanist.testnet", "hamzatest.tesnet"]
+
 
   // This functions checks if the profile is already linked to this near account or not, if it isn't then it creates as new profile
   @mutateState()
@@ -26,8 +28,7 @@ export class Contract {
   // assuming that the admin id is Owner.testnet
   @mutateState()
   verifyAccount(accountID : string, verification : verificationType ) : string{
-    let adminProfile = "Owner.testnet"
-    // assert(context.predecessor == adminProfile, "Access Denied")
+    assert(this.adminList.includes(context.predecessor), "Access Denied")
     assert(this.profilesList.contains(accountID), "This NEAR ID is missing")
     this.profilesList.set(accountID, verification)
     return accountID
@@ -67,8 +68,7 @@ export class Contract {
   
   // This function returns users' accounts ID
   getUsers() : Array<string> {
-    let adminProfile = "kareemayman.testnet"
-    assert(context.predecessor == adminProfile, "Access Denied")
+    assert(this.adminList.includes(context.predecessor), "Access Denied")
     let users = new Array<string>(this.usersAccountsId.length)
     for (let i = 0; i < this.usersAccountsId.length; i++) {
       let user = this.usersAccountsId[i];
