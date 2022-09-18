@@ -71,8 +71,7 @@ export class Contract {
     assert(this.adminList.includes(context.predecessor), "Access Denied")
     let users = new Array<string>(this.usersAccountsId.length)
     for (let i = 0; i < this.usersAccountsId.length; i++) {
-      let user = this.usersAccountsId[i];
-      users[i] = user;
+      users[i] = (this.usersAccountsId[i]) + "," + (this.verificationPerUser(this.usersAccountsId[i])) ;
     }
     return users;
   } 
