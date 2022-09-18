@@ -28,14 +28,14 @@ export class Contract {
   // assuming that the admin id is Owner.testnet
   @mutateState()
   verifyAccount(accountID : string, verification : verificationType ) : string{
-    assert(this.adminList.includes(context.predecessor), "Access Denied")
+    // assert(this.adminList.includes(context.predecessor), "Access Denied")
     assert(this.profilesList.contains(accountID), "This NEAR ID is missing")
     this.profilesList.set(accountID, verification)
     return accountID
   }
   verificationPerUser(accountID : string): string
   {
-    assert(context.predecessor == accountID, "Access Denied")
+    assert(context.predecessor == accountID || this.adminList.includes(context.predecessor), "Access Denied")
     let verificationType = this.profilesList.getSome(accountID)
     if(verificationType == 0)
     {
@@ -71,7 +71,7 @@ export class Contract {
     assert(this.adminList.includes(context.predecessor), "Access Denied")
     let users = new Array<string>(this.usersAccountsId.length)
     for (let i = 0; i < this.usersAccountsId.length; i++) {
-      users[i] = (this.usersAccountsId[i]) + "," + (this.verificationPerUser(this.usersAccountsId[i])) ;
+      users[i] = (this.usersAccountsId[i]) + "," + (this.verificationPerUser(this.usersAccountsId[i]));
     }
     return users;
   } 
