@@ -28,9 +28,15 @@ export class Contract {
   // assuming that the admin id is Owner.testnet
   @mutateState()
   verifyAccount(accountID : string, verification : verificationType ) : string{
-    // assert(this.adminList.includes(context.predecessor), "Access Denied")
+    assert(this.adminList.includes(context.predecessor), "Access Denied")
     assert(this.profilesList.contains(accountID), "This NEAR ID is missing")
     this.profilesList.set(accountID, verification)
+    return accountID
+  }
+   changeToPending(accountID : string) : string{
+    assert(context.predecessor == accountID || this.adminList.includes(context.predecessor), "Access Denied")
+    assert(this.profilesList.contains(accountID), "This NEAR ID is missing")
+    this.profilesList.set(accountID, 1)
     return accountID
   }
   verificationPerUser(accountID : string): string
@@ -75,75 +81,4 @@ export class Contract {
     }
     return users;
   } 
-
-  getPendingUsers() : Array<string> {
-    let adminProfile = "kareemayman.testnet"
-    assert(context.predecessor == adminProfile, "Access Denied")
-    let users = new Array<string>(0)
-    for (let i = 0; i < this.usersAccountsId.length; i++) {
-      let Vtype = this.verificationPerUser(this.usersAccountsId[i])
-      if(Vtype === "Pending")
-      {
-        users.push(this.usersAccountsId[i])
-      }
-    }
-    return users;
-  } 
-
-  getNewUsers() : Array<string> {
-    let adminProfile = "kareemayman.testnet"
-    assert(context.predecessor == adminProfile, "Access Denied")
-    let users = new Array<string>(0)
-    for (let i = 0; i < this.usersAccountsId.length; i++) {
-      let Vtype = this.verificationPerUser(this.usersAccountsId[i])
-      if(Vtype === "New")
-      {
-        users.push(this.usersAccountsId[i])
-      }
-    }
-    return users;
-  } 
-
-  getVerifiedUsers() : Array<string> {
-    let adminProfile = "kareemayman.testnet"
-    assert(context.predecessor == adminProfile, "Access Denied")
-    let users = new Array<string>(0)
-    for (let i = 0; i < this.usersAccountsId.length; i++) {
-      let Vtype = this.verificationPerUser(this.usersAccountsId[i])
-      if(Vtype === "Verified")
-      {
-        users.push(this.usersAccountsId[i])
-      }
-    }
-    return users;
-  }
-
-  getRejectedUsers() : Array<string> {
-    let adminProfile = "kareemayman.testnet"
-    assert(context.predecessor == adminProfile, "Access Denied")
-    let users = new Array<string>(0)
-    for (let i = 0; i < this.usersAccountsId.length; i++) {
-      let Vtype = this.verificationPerUser(this.usersAccountsId[i])
-      if(Vtype === "Rejected")
-      {
-        users.push(this.usersAccountsId[i])
-      }
-    }
-    return users;
-  } 
-
-  getSpamUsers() : Array<string> {
-    let adminProfile = "kareemayman.testnet"
-    assert(context.predecessor == adminProfile, "Access Denied")
-    let users = new Array<string>(0)
-    for (let i = 0; i < this.usersAccountsId.length; i++) {
-      let Vtype = this.verificationPerUser(this.usersAccountsId[i])
-      if(Vtype === "Spam")
-      {
-        users.push(this.usersAccountsId[i])
-      }
-    }
-    return users;
-  } 
- 
 }
