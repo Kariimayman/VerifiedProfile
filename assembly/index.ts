@@ -80,5 +80,5 @@ export class Contract {
       users[i] = (this.usersAccountsId[i]) + "," + (this.verificationPerUser(this.usersAccountsId[i]));
     }
     return users;
-  } 
+  }
 }
