@@ -12,7 +12,7 @@ export class Contract {
   profilesList : PersistentMap<string, verificationType> = new PersistentMap<string, verificationType>("P");
   // A List contains all accounts ID
   usersAccountsId : PersistentVector<string> = new PersistentVector<string>("U");
-  adminList : Array<string> = ["kareemayman.testnet", "aliabdallah.testnet", "mhassanist.testnet", "hamzatest.tesnet"]
+  adminList : Array<string> = ["kareemayman.testnet", "aliabdallah9.testnet", "mhassanist.testnet", "hamzatest.tesnet"]
 
 
   // This functions checks if the profile is already linked to this near account or not, if it isn't then it creates as new profile
