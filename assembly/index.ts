@@ -15,13 +15,7 @@ export class Contract {
   >("P");
   // A List contains all accounts ID
   usersAccountsId: PersistentVector<string> = new PersistentVector<string>("U");
-  adminList: Array<string> = [
-    "kareemayman.testnet",
-    "aliabdallah9.testnet",
-    "mhassanist.testnet",
-    "hamzatest.tesnet",
-  ];
-
+  adminsList : Array<string> = ["kareemayman.testnet","aliabdallah9.testnet","hamzatest.testnet","mhassanist.testnet"]
 accountExist(accountID: string):bool
 {
   if(this.profilesList.contains(accountID))
@@ -33,26 +27,28 @@ accountExist(accountID: string):bool
 
 adminExist(accountID: string):bool
 {
-  for (let i: i32 = 0; i < this.adminList.length; i++)
+  for (let i: i32 = 0; i < this.adminsList.length; i++)
   {
-    if(accountID == this.adminList[i])
-    return true
+    if(this.adminsList[i] == accountID)
+    {
+      return true
+    }
   }
   return false
 }
 
   // This functions checks if the profile is already linked to this near account or not, if it isn't then it creates as new profile
   @mutateState()
-  createProfile(): string {
+  createProfile() : string {
     let accountID = context.sender;
     assert(
-      !this.profilesList.contains(accountID),
+      !this.accountExist(accountID),
       "This NEAR ID is already linked to another account"
     );
     this.profilesList.set(accountID, 0);
     this.usersAccountsId.push(accountID); // Storage Users' Accounts IDs
-    return accountID;
-  }
+    return accountID
+ }
 
   // assuming that the admin id is Owner.testnet
   @mutateState()
@@ -63,10 +59,11 @@ adminExist(accountID: string):bool
     return accountID;
   }
 
+  @mutateState()
   changeToPending(accountID: string): string {
     assert(
       context.predecessor == accountID ||
-        this.adminList.includes(context.predecessor),
+        this.adminsList.includes(context.predecessor),
       "Access Denied"
     );
     assert(this.profilesList.contains(accountID), "This NEAR ID is missing");
@@ -76,7 +73,7 @@ adminExist(accountID: string):bool
   verificationPerUser(accountID: string): string {
     assert(
       context.predecessor == accountID ||
-        this.adminList.includes(context.predecessor),
+        this.adminsList.includes(context.predecessor),
       "Access Denied"
     );
     let verificationType = this.profilesList.getSome(accountID);
@@ -102,7 +99,7 @@ adminExist(accountID: string):bool
 
   // This function returns users' accounts ID
   getUsers(): Array<string> {
-    assert(this.adminList.includes(context.predecessor), "Access Denied");
+    assert(this.adminsList.includes(context.predecessor), "Access Denied");
     let users = new Array<string>(this.usersAccountsId.length);
     for (let i = 0; i < this.usersAccountsId.length; i++) {
       users[i] =
